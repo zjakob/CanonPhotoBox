@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="PhotoBox.PrintLayout"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PhotoBox"
+             mc:Ignorable="d" 
+             d:DesignHeight="1800" d:DesignWidth="1200" MaxHeight="1800" MaxWidth="1200" MinHeight="1800" MinWidth="1200" Height="1800" Width="1200" x:Name="PrintLayoutMain">
+    <UserControl.Resources>
+        <local:StringToUriConverter x:Key="stringToUriConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="{Binding BackgroundFile}" />
+        </Grid.Background>
+        <UniformGrid Columns="2">
+            <StackPanel Orientation="Vertical" Margin="{Binding PrintoutMarginTop}">
+                <ItemsControl ItemsSource="{Binding ViewerImages, UpdateSourceTrigger=PropertyChanged}" IsHitTestVisible="True" Panel.ZIndex="2">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="{Binding NumberOfPhotosTaken, UpdateSourceTrigger=PropertyChanged}" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Margin="{Binding DataContext.PrintoutMarginInbetween, ElementName=PrintLayoutMain}" Height="Auto" Width="Auto" Source="{Binding Converter={StaticResource stringToUriConverter}}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="{Binding PrintoutMarginTop}">
+                <ItemsControl ItemsSource="{Binding ViewerImages, UpdateSourceTrigger=PropertyChanged}" IsHitTestVisible="True">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="{Binding NumberOfPhotosTaken, UpdateSourceTrigger=PropertyChanged}" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Margin="{Binding DataContext.PrintoutMarginInbetween, ElementName=PrintLayoutMain}" Height="Auto" Width="Auto" Source="{Binding Converter={StaticResource stringToUriConverter}}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </UniformGrid>
+    </Grid>
+</UserControl>

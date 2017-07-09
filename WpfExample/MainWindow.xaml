@@ -1,0 +1,107 @@
+﻿<Window x:Class="PhotoBox.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PhotoBox"
+        mc:Ignorable="d"
+        Title="PhotoBox" Height="704" Width="1056" MinWidth="645" MinHeight="694" Closing="Window_Closing" WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize" Background="Black" >
+
+    <!--
+        WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize"
+    -->
+    
+    <Window.Resources>
+        <local:InvertVisibilityConverter x:Key="invertVisConverter" />
+
+
+        <Style x:Key="RoundedButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="15" Background="White" BorderThickness="1" Padding="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid>
+            <Viewbox Stretch="Uniform">
+            <Canvas x:Name="LVCanvas" Background="LightGray" Height="704" Width="1056" >
+                <Canvas.LayoutTransform>
+                    <ScaleTransform ScaleX="-1" />
+                </Canvas.LayoutTransform>
+            </Canvas>
+            </Viewbox>
+        </Grid>
+        <Grid x:Name="TakePhotoButtonMain" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.4" >
+            <Button BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" Width="310" Height="180" FontWeight="Bold" FontSize="60" Click="TakePhotoButton_Click">
+
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="15" Background="White" BorderThickness="1" Padding="2">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="30" ShadowDepth="1" />
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+
+                <TextBlock TextAlignment="Center">Take<LineBreak />Photos!</TextBlock>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="CircularCountDownGrid" Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="30" ShadowDepth="1" />
+            </Grid.Effect>
+            <local:CircularProgressBar HorizontalAlignment="Center" VerticalAlignment="Center" SegmentColor="#88999999" StrokeThickness="200" Percentage="100" Radius="100" />
+            <local:CircularProgressBar x:Name="CircularCountDown" HorizontalAlignment="Center" VerticalAlignment="Center" SegmentColor="#FF44e8fa" StrokeThickness="40" Percentage="10" Radius="180" />
+            <TextBlock x:Name="CountDownTxt" Text="3" FontSize="180" Foreground="#FF44e8fa" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent" />
+        </Grid>
+        
+        <Button x:Name="uxShowSettingsBtn" HorizontalAlignment="Left" VerticalAlignment="Top" Opacity="0.0" Width="70" Height="50" FontWeight="Bold" FontSize="60" Click="ShowSettings_Click" />
+        <GroupBox x:Name="uxSettingsGroupBox" Header="Settings" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom" Height="180" Width="329" Grid.ColumnSpan="2" IsEnabled="False" Visibility="Collapsed">
+            <Grid>
+                <ComboBox x:Name="AvCoBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="AvCoBox_SelectionChanged"/>
+                <ComboBox x:Name="TvCoBox" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="TvCoBox_SelectionChanged"/>
+                <ComboBox x:Name="ISOCoBox" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="ISOCoBox_SelectionChanged"/>
+                <ProgressBar x:Name="MainProgressBar" HorizontalAlignment="Left" Height="22" Margin="10,91,0,0" VerticalAlignment="Top" Width="137"/>
+                <Label Content="Av" HorizontalAlignment="Left" Margin="118,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.447,0.538"/>
+                <Label Content="Tv" HorizontalAlignment="Left" Margin="118,33,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.447,0.538"/>
+                <Label Content="ISO" HorizontalAlignment="Left" Margin="118,60,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.447,0.538"/>
+                <Button x:Name="TakePhotoButtonSettings" HorizontalAlignment="Left" Margin="162,64,0,0" VerticalAlignment="Top" Width="70" Height="49" FontWeight="Bold" FontSize="16" Click="TakePhotoButton_Click">
+                    <TextBlock TextAlignment="Center">Take<LineBreak/>Photo</TextBlock>
+                </Button>
+                <Slider x:Name="BulbSlider" HorizontalAlignment="Left" Margin="162,37,0,0" VerticalAlignment="Top" Width="110" Minimum="1" Maximum="200" Value="30" LargeChange="10" TickFrequency="10" ToolTip="Bulb (in seconds)" ValueChanged="BulbSlider_ValueChanged"/>
+                <TextBox x:Name="BulbBox" HorizontalAlignment="Left" Height="23" Margin="277,37,0,0" TextWrapping="Wrap" Text="30" VerticalAlignment="Top" Width="30" UndoLimit="0" ToolTip="Bulb (in seconds)" TextChanged="BulbBox_TextChanged"/>
+            </Grid>
+        </GroupBox>
+
+        <local:ImageViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black"  Width="Auto" Height="Auto" x:Name="uxImageViewerContainer" Visibility="{Binding ImageViewerVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Grid Visibility="Collapsed" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+            <Button x:Name="uxBrowseAllPicturesBtn" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="49" FontWeight="Bold" FontSize="16" Click="BrowseAllPictures_Click" Visibility="{Binding ImageViewerVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource invertVisConverter}}">
+
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="15" Background="White" BorderThickness="1" Padding="2">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="30" ShadowDepth="1" />
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+
+            <TextBlock TextAlignment="Center">Show all Photos!</TextBlock>
+            </Button>
+        </Grid>
+
+    </Grid>
+</Window>

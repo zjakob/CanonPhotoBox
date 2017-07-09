@@ -1,0 +1,48 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PhotoBox.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DefaultPictureFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\Jakob\Pictures\PhotoBox</Value>
+    </Setting>
+    <Setting Name="NumberOfPhotosTaken" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="FirstCountDownSeconds" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="InbetweenCountDownSeconds" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="ReviewTimeMS" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
+    <Setting Name="BackgroundFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\Jakob\Downloads\PhotoBox\resources\background.jpg</Value>
+    </Setting>
+    <Setting Name="PrinterFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\Jakob\Pictures\PhotoBoxPrinter</Value>
+    </Setting>
+    <Setting Name="PrintoutMarginTop" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="PrintoutMarginInbetween" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">40</Value>
+    </Setting>
+    <Setting Name="PrinterName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DP-DS620</Value>
+    </Setting>
+    <Setting Name="PrintedImageX" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="PrintedImageY" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="PrintedImageWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">400</Value>
+    </Setting>
+    <Setting Name="PrintedImageHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">600</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
