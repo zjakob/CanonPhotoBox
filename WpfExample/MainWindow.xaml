@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PhotoBox"
         mc:Ignorable="d"
-        Title="PhotoBox" Height="704" Width="1056" MinWidth="645" MinHeight="694" Closing="Window_Closing" WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize" Background="Black" >
+        Title="PhotoBox" Height="704" Width="1056" MinWidth="645" MinHeight="694" Closing="Window_Closing" WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize" Background="Black">
 
     <!--
         WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize"
@@ -85,6 +85,11 @@
 
         <local:ImageViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black"  Width="Auto" Height="Auto" x:Name="uxImageViewerContainer" Visibility="{Binding ImageViewerVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
+
+        <Grid x:Name="uxStandbyMessage" Background="Black" Visibility="Collapsed" MouseDown="StandbyMessage_MouseDown" TouchDown="StandbyMessage_TouchDown">
+            <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="48" TextAlignment="Center">Bitte den Bildschirm berühren<LineBreak/> - Kamera im Standby-Modus</TextBlock>
+        </Grid>
+        
         <Grid Visibility="Collapsed" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
             <Button x:Name="uxBrowseAllPicturesBtn" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="49" FontWeight="Bold" FontSize="16" Click="BrowseAllPictures_Click" Visibility="{Binding ImageViewerVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource invertVisConverter}}">
 

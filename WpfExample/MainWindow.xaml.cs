@@ -20,6 +20,11 @@ namespace PhotoBox
     {
         #region Variables
 
+
+        bool inStandby = false;
+        int standbyAfterMin = 5;
+        System.Windows.Threading.DispatcherTimer standbyTimer;
+
         CanonAPI APIHandler;
         Camera MainCamera = null;
         CameraValue[] AvList;
@@ -32,6 +37,7 @@ namespace PhotoBox
         Action<BitmapImage> SetImageAction;
         System.Windows.Forms.FolderBrowserDialog SaveFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
         System.Windows.Threading.DispatcherTimer countdownTimer;
+
 
         int ErrCount;
         object ErrLock = new object();
@@ -60,10 +66,21 @@ namespace PhotoBox
             countdownTimer.Tick += new EventHandler(OnCountDownTick);
             countdownTimer.Interval = new TimeSpan(0, 0, 1);
 
+
+            StartCamera();
+
+            standbyTimer = new System.Windows.Threading.DispatcherTimer();
+            standbyTimer.Tick += new EventHandler(OnGoToStandby);
+            ResetStandbyTimer();
+        }
+
+        private void StartCamera()
+        {
             try
             {
                 APIHandler = new CanonAPI();
                 APIHandler.CameraAdded += APIHandler_CameraAdded;
+
                 ErrorHandler.SevereErrorHappened += ErrorHandler_SevereErrorHappened;
                 ErrorHandler.NonSevereErrorHappened += ErrorHandler_NonSevereErrorHappened;
                 SetImageAction = (BitmapImage img) => {
@@ -74,7 +91,7 @@ namespace PhotoBox
                 RefreshCamera();
                 IsInit = true;
                 OpenSession();
-                
+
                 // store pics on pc
                 MainCamera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Both);
                 MainCamera.SetCapacity(4096, int.MaxValue);
@@ -83,21 +100,36 @@ namespace PhotoBox
                 SetLVAf();
             }
             catch (DllNotFoundException) { ReportError("Canon DLLs not found!", true); Application.Current.Shutdown(); }
-            catch (Exception ex) { ReportError(ex.Message, true); Application.Current.Shutdown(); }
+            catch (Exception ex) { ReportError("Error starting camera: " + ex.Message, true); Application.Current.Shutdown(); }
+        }
+
+        private void StopCamera()
+        {
+            IsInit = false;
+
+            CloseSession();
+            try
+            {
+
+                MainCamera?.Dispose();
+                MainCamera = null;
+
+                APIHandler?.Dispose();
+                APIHandler.CameraAdded -= APIHandler_CameraAdded;
+                APIHandler = null;
+
+                ErrorHandler.SevereErrorHappened -= ErrorHandler_SevereErrorHappened;
+                ErrorHandler.NonSevereErrorHappened -= ErrorHandler_NonSevereErrorHappened;
+            }
+            catch (Exception ex)
+            {
+                ReportError("Error stopping camera: " + ex.Message, false);
+            }
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            CloseSession();
-            try
-            {
-                MainCamera?.Dispose();
-                APIHandler?.Dispose();
-            }
-            catch (Exception ex)
-            {
-                ReportError(ex.Message, false);
-            }
+            StopCamera();
         }
 
         #region API Events
@@ -239,30 +271,34 @@ namespace PhotoBox
             if (successfullySaved && !String.IsNullOrEmpty(printerName) && !String.IsNullOrWhiteSpace(printerName))
             {
                 new System.Threading.Thread(delegate () {
-                    System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();
-                    pd.PrinterSettings.PrinterName = printerName;
-                    System.Drawing.Printing.PaperSize ps = new System.Drawing.Printing.PaperSize("First custom size", (int)printLayout.ActualWidth, (int)printLayout.ActualHeight);
-                    pd.DefaultPageSettings.PaperSize = ps;
-                    pd.PrintPage += (sender, args) =>
+                    try
                     {
-                        using (FileStream readFs = new FileStream(printerFolderPath, FileMode.Open, System.IO.FileAccess.Read))
+                        System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();
+                        pd.PrinterSettings.PrinterName = printerName;
+                        System.Drawing.Printing.PaperSize ps = new System.Drawing.Printing.PaperSize("First custom size", (int)printLayout.ActualWidth, (int)printLayout.ActualHeight);
+                        pd.DefaultPageSettings.PaperSize = ps;
+                        pd.PrintPage += (sender, args) =>
                         {
-                            System.Drawing.Image i = System.Drawing.Image.FromStream(readFs);
-                            //System.Drawing.Point p = new System.Drawing.Point(0, 0);
+                            using (FileStream readFs = new FileStream(printerFolderPath, FileMode.Open, System.IO.FileAccess.Read))
+                            {
+                                System.Drawing.Image i = System.Drawing.Image.FromStream(readFs);
+                                //System.Drawing.Point p = new System.Drawing.Point(0, 0);
                             
-                            /*
-                            int printedImageX = Properties.Settings.Default.PrintedImageX;
-                            int printedImageY = Properties.Settings.Default.PrintedImageY;
-                            // Create rectangle for source image.
-                            System.Drawing.Rectangle srcRect = new System.Drawing.Rectangle(0, 0, Properties.Settings.Default.PrintedImageWidth, Properties.Settings.Default.PrintedImageHeight);
-                            System.Drawing.GraphicsUnit units = System.Drawing.GraphicsUnit.Millimeter;
-                            args.Graphics.DrawImage(i, printedImageX, printedImageY, Properties.Settings.Default.PrintedImageWidth, Properties.Settings.Default.PrintedImageHeight);
-                            */
-                            args.Graphics.DrawImage(i, Properties.Settings.Default.PrintedImageX, Properties.Settings.Default.PrintedImageY, Properties.Settings.Default.PrintedImageWidth, Properties.Settings.Default.PrintedImageHeight); // in inch * 100?
-                            //i.Dispose();
-                        }
-                    };
-                    pd.Print();
+                                /*
+                                int printedImageX = Properties.Settings.Default.PrintedImageX;
+                                int printedImageY = Properties.Settings.Default.PrintedImageY;
+                                // Create rectangle for source image.
+                                System.Drawing.Rectangle srcRect = new System.Drawing.Rectangle(0, 0, Properties.Settings.Default.PrintedImageWidth, Properties.Settings.Default.PrintedImageHeight);
+                                System.Drawing.GraphicsUnit units = System.Drawing.GraphicsUnit.Millimeter;
+                                args.Graphics.DrawImage(i, printedImageX, printedImageY, Properties.Settings.Default.PrintedImageWidth, Properties.Settings.Default.PrintedImageHeight);
+                                */
+                                args.Graphics.DrawImage(i, Properties.Settings.Default.PrintedImageX, Properties.Settings.Default.PrintedImageY, Properties.Settings.Default.PrintedImageWidth, Properties.Settings.Default.PrintedImageHeight); // in inch * 100?
+                                //i.Dispose();
+                            }
+                        };
+                        pd.Print();
+                    }
+                    catch (Exception ex) { ReportError("Printing error: " + ex.Message, false); }
                 }).Start();
             }
             
@@ -306,7 +342,7 @@ namespace PhotoBox
 
         private void TakingPictureFinished()
         {
-            if (repeatCount == 0)
+            if (repeatCount == 0) // after finishing the full series of pictures
             {
                 countdownTimer.Stop();
                 CountDownTxt.Text = "";
@@ -319,7 +355,7 @@ namespace PhotoBox
 
                 PrintPhotos();
             }
-            else
+            else // after taking only one picture out of a series
             {
                 takingFirstPicture = false;
                 if (!countdownTimer.IsEnabled)
@@ -401,6 +437,8 @@ namespace PhotoBox
         uint imageId = 0;
         private void TakePhotoButton_Click(object sender, RoutedEventArgs e)
         {
+            ResetStandbyTimer();
+
             imageId++;
             StartTimer();
         }
@@ -419,6 +457,26 @@ namespace PhotoBox
             countdownTimer.Start();
 
             _vm.ViewerImages.Clear();
+        }
+
+        private void OnGoToStandby(object sender, EventArgs e)
+        {
+            uxStandbyMessage.Visibility = Visibility.Visible;
+            inStandby = true;
+
+            //StopCamera();
+            
+            StopLV();
+        }
+
+        private void WakeupFromStandby()
+        {
+            uxStandbyMessage.Visibility = Visibility.Collapsed;
+            inStandby = false;
+
+            //StartCamera();
+            
+            StartLV();
         }
 
         private void OnCountDownTick(object sender, EventArgs e)
@@ -520,7 +578,13 @@ namespace PhotoBox
         {
             StopLV();
             if (MainCamera != null)
+            {
+                MainCamera.LiveViewUpdated -= MainCamera_LiveViewUpdated;
+                MainCamera.ProgressChanged -= MainCamera_ProgressChanged;
+                MainCamera.StateChanged -= MainCamera_StateChanged;
+                MainCamera.DownloadReady -= MainCamera_DownloadReady;
                 MainCamera.CloseSession();
+            }
             AvCoBox.Items.Clear();
             TvCoBox.Items.Clear();
             ISOCoBox.Items.Clear();
@@ -617,5 +681,28 @@ namespace PhotoBox
         }
 
         #endregion
+
+        private void StandbyMessage_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (inStandby)
+            {
+                WakeupFromStandby();
+            }
+        }
+
+        private void StandbyMessage_TouchDown(object sender, System.Windows.Input.TouchEventArgs e)
+        {
+            if (inStandby)
+            {
+                WakeupFromStandby();
+            }
+        }
+
+        private void ResetStandbyTimer()
+        {
+            standbyTimer.Stop();
+            standbyTimer.Interval = new TimeSpan(0, standbyAfterMin, 0);
+            standbyTimer.Start();
+        }
     }
 }

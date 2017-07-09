@@ -133,7 +133,7 @@ namespace PhotoBox.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DP-DS620")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string PrinterName {
             get {
                 return ((string)(this["PrinterName"]));

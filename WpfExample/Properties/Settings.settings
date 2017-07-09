@@ -30,7 +30,7 @@
       <Value Profile="(Default)">40</Value>
     </Setting>
     <Setting Name="PrinterName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">DP-DS620</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="PrintedImageX" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
