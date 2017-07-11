@@ -237,6 +237,13 @@ namespace PhotoBox
         int printId = 1;
         private void PrintPhotos()
         {
+            string printerName = Properties.Settings.Default.PrinterName;
+            if (String.IsNullOrEmpty(printerName) || String.IsNullOrWhiteSpace(printerName))
+            {
+                //ReportError("Cannot Print Photo: Printer not found!", false);
+                return;
+            }
+
             string printerFolder = Properties.Settings.Default.PrinterFolder;
             if (String.IsNullOrEmpty(printerFolder) || String.IsNullOrWhiteSpace(printerFolder) || !Directory.Exists(printerFolder))
             {
@@ -280,14 +287,7 @@ namespace PhotoBox
                 ReportError("Cannot Print Photo: Printout could not be saved!", false);
                 return;
             }
-
-
-            string printerName = Properties.Settings.Default.PrinterName;
-            if (String.IsNullOrEmpty(printerName) || String.IsNullOrWhiteSpace(printerName))
-            {
-                ReportError("Cannot Print Photo: Printer not found!", false);
-                return;
-            }
+            
             
             {
                 new System.Threading.Thread(delegate () {
