@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ImageFolderViewer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DefaultPictureFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\Jakob\Pictures\PhotoBooth</Value>
+    </Setting>
+    <Setting Name="CountDownRepeat" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="ImageDisplayTimeMS" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">15000</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
