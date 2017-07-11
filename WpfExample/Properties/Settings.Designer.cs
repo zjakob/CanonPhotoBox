@@ -190,5 +190,17 @@ namespace PhotoBox.Properties {
                 this["PrintedImageHeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowImageViewer {
+            get {
+                return ((bool)(this["ShowImageViewer"]));
+            }
+            set {
+                this["ShowImageViewer"] = value;
+            }
+        }
     }
 }

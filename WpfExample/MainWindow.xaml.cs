@@ -370,8 +370,8 @@ namespace PhotoBox
                 CircularCountDownGrid.Visibility = Visibility.Hidden;
                 TakePhotoButtonMain.Visibility = Visibility.Visible;
 
-                _vm.ImageViewerVisibility = Visibility.Visible;
-
+                if (Properties.Settings.Default.ShowImageViewer)
+                    _vm.ImageViewerVisibility = Visibility.Visible;
 
                 PrintPhotos();
             }
