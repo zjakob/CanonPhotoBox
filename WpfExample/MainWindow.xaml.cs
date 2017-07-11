@@ -238,8 +238,18 @@ namespace PhotoBox
         private void PrintPhotos()
         {
             string printerFolder = Properties.Settings.Default.PrinterFolder;
-            if (String.IsNullOrEmpty(printerFolder) || !Directory.Exists(printerFolder))
+            if (String.IsNullOrEmpty(printerFolder) || String.IsNullOrWhiteSpace(printerFolder) || !Directory.Exists(printerFolder))
+            {
+                ReportError("Cannot Print Photo: Printer folder does not exist!", false);
                 return;
+            }
+
+            string printoutBackground = Properties.Settings.Default.BackgroundFile;
+            if (String.IsNullOrEmpty(printoutBackground) || String.IsNullOrWhiteSpace(printoutBackground) || !File.Exists(printoutBackground))
+            {
+                ReportError("Cannot Print Photo: Printout background file does not exist!", false);
+                return;
+            }
 
             var printLayout = new PrintLayout { Width = 1200, Height = 1800 };
             printLayout.DataContext = _vm;
@@ -265,10 +275,20 @@ namespace PhotoBox
                 successfullySaved = true;
             }
 
+            if (!successfullySaved)
+            {
+                ReportError("Cannot Print Photo: Printout could not be saved!", false);
+                return;
+            }
 
 
             string printerName = Properties.Settings.Default.PrinterName;
-            if (successfullySaved && !String.IsNullOrEmpty(printerName) && !String.IsNullOrWhiteSpace(printerName))
+            if (String.IsNullOrEmpty(printerName) || String.IsNullOrWhiteSpace(printerName))
+            {
+                ReportError("Cannot Print Photo: Printer not found!", false);
+                return;
+            }
+            
             {
                 new System.Threading.Thread(delegate () {
                     try

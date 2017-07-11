@@ -21,7 +21,7 @@
       <Value Profile="(Default)">C:\Users\Jakob\Downloads\PhotoBox\resources\background.jpg</Value>
     </Setting>
     <Setting Name="PrinterFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Users\Jakob\Pictures\PhotoBoxPrinter</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="PrintoutMarginTop" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">60</Value>

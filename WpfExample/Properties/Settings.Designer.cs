@@ -97,7 +97,7 @@ namespace PhotoBox.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Jakob\\Pictures\\PhotoBoxPrinter")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string PrinterFolder {
             get {
                 return ((string)(this["PrinterFolder"]));
