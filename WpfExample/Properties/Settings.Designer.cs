@@ -202,5 +202,17 @@ namespace PhotoBox.Properties {
                 this["ShowImageViewer"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DropboxPictureFolder {
+            get {
+                return ((string)(this["DropboxPictureFolder"]));
+            }
+            set {
+                this["DropboxPictureFolder"] = value;
+            }
+        }
     }
 }

@@ -184,13 +184,13 @@ namespace PhotoBox
 
         private void MainCamera_DownloadReady(Camera sender, DownloadInfo Info)
         {
-            string dir = null;
+            string defaultPhotoDir = null;
             try
             {
-                dir = _vm.STORAGE_PATH;
+                defaultPhotoDir = _vm.STORAGE_PATH;
                 String date = DateTime.Now.ToString("yyyy-MM-dd_hh-mm", System.Globalization.CultureInfo.GetCultureInfo("de-DE"));
                 Info.FileName = date + "_" + uniqueSessionId + "_" +  imageId + "_" + repeatCount + "_" + Info.FileName;
-                sender.DownloadFile(Info, dir);
+                sender.DownloadFile(Info, defaultPhotoDir);
                 MainProgressBar.Dispatcher.Invoke((Action)delegate { MainProgressBar.Value = 0; });
 
             }
@@ -202,13 +202,21 @@ namespace PhotoBox
             // invoke WPF-UI-Thread, since this method is called by the DLL
             this.Dispatcher.Invoke((Action)(() =>
             {
-                if (dir != null)
+                if (defaultPhotoDir != null)
                 {
-                    _vm.ViewerImages.Add(dir + "\\" + Info.FileName);
-                    _vm.AllImages.Add(dir + "\\" + Info.FileName);
+                    _vm.ViewerImages.Add(defaultPhotoDir + "\\" + Info.FileName);
+                    _vm.AllImages.Add(defaultPhotoDir + "\\" + Info.FileName);
                     if (_vm.AllImages.Count > SessionViewModel.MAX_PICTURE_CNT)
                     {
                         _vm.AllImages.RemoveAt(0);
+                    }
+
+
+
+                    String dropboxPictureFolder = System.IO.Path.GetFullPath(Properties.Settings.Default.DropboxPictureFolder);
+                    if (!String.IsNullOrEmpty(dropboxPictureFolder) && !String.IsNullOrWhiteSpace(dropboxPictureFolder) && Directory.Exists(dropboxPictureFolder))
+                    {
+                        System.IO.File.Copy(defaultPhotoDir + "\\" + Info.FileName, dropboxPictureFolder + "\\" + Info.FileName, false);
                     }
                 }
 
