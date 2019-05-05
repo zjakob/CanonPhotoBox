@@ -214,5 +214,29 @@ namespace PhotoBox.Properties {
                 this["DropboxPictureFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public int LiveViewScaleX {
+            get {
+                return ((int)(this["LiveViewScaleX"]));
+            }
+            set {
+                this["LiveViewScaleX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int LiveViewScaleY {
+            get {
+                return ((int)(this["LiveViewScaleY"]));
+            }
+            set {
+                this["LiveViewScaleY"] = value;
+            }
+        }
     }
 }

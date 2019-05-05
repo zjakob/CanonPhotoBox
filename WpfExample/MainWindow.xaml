@@ -33,7 +33,7 @@
             <Viewbox Stretch="Uniform">
             <Canvas x:Name="LVCanvas" Background="LightGray" Height="704" Width="1056" >
                 <Canvas.LayoutTransform>
-                    <ScaleTransform ScaleX="-1" />
+                    <ScaleTransform ScaleX="{Binding LiveViewScaleX}" ScaleY="{Binding LiveViewScaleY}" />
                 </Canvas.LayoutTransform>
             </Canvas>
             </Viewbox>

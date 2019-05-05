@@ -149,7 +149,7 @@ namespace PhotoBox
             }
             else
             {
-                SetLVAf();
+                //SetLVAf();
             }
                 
         }
@@ -196,7 +196,7 @@ namespace PhotoBox
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
-            SetLVAf();
+            //SetLVAf();
 
 
             // invoke WPF-UI-Thread, since this method is called by the DLL
@@ -594,7 +594,10 @@ namespace PhotoBox
 
         private void SetLVAf()
         {
-            try { MainCamera.SendCommand(CameraCommand.DoEvfAf, (int)EvfAFMode.Quick); }
+            try
+            {
+                MainCamera.SendCommand(CameraCommand.DoEvfAf, 0);
+            }
             catch (Exception ex) { ReportError(ex.Message, false); }
         }
 

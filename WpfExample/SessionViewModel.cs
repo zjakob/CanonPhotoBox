@@ -107,6 +107,15 @@ namespace PhotoBox
         #endregion
 
 
+        public int LiveViewScaleX
+        {
+            get { return Properties.Settings.Default.LiveViewScaleX; }
+        }
+        public int LiveViewScaleY
+        {
+            get { return Properties.Settings.Default.LiveViewScaleY; }
+        }
+
         public SessionViewModel()
         {
             AllImages = new List<string>();
