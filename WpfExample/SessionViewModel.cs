@@ -107,6 +107,15 @@ namespace PhotoBox
         #endregion
 
 
+        public int WindowScaleX
+        {
+            get { return Properties.Settings.Default.WindowScaleX; }
+        }
+        public int WindowScaleY
+        {
+            get { return Properties.Settings.Default.WindowScaleY; }
+        }
+
         public int LiveViewScaleX
         {
             get { return Properties.Settings.Default.LiveViewScaleX; }

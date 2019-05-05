@@ -238,5 +238,29 @@ namespace PhotoBox.Properties {
                 this["LiveViewScaleY"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int WindowScaleX {
+            get {
+                return ((int)(this["WindowScaleX"]));
+            }
+            set {
+                this["WindowScaleX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public int WindowScaleY {
+            get {
+                return ((int)(this["WindowScaleY"]));
+            }
+            set {
+                this["WindowScaleY"] = value;
+            }
+        }
     }
 }

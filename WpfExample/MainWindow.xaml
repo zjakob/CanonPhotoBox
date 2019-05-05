@@ -10,7 +10,7 @@
     <!--
         WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize"
     -->
-    
+
     <Window.Resources>
         <local:InvertVisibilityConverter x:Key="invertVisConverter" />
 
@@ -27,15 +27,18 @@
             </Setter>
         </Style>
     </Window.Resources>
-    
+
     <Grid>
+        <Grid.LayoutTransform>
+            <ScaleTransform ScaleX="{Binding WindowScaleX}" ScaleY="{Binding WindowScaleY}" />
+        </Grid.LayoutTransform>
         <Grid>
             <Viewbox Stretch="Uniform">
-            <Canvas x:Name="LVCanvas" Background="LightGray" Height="704" Width="1056" >
-                <Canvas.LayoutTransform>
-                    <ScaleTransform ScaleX="{Binding LiveViewScaleX}" ScaleY="{Binding LiveViewScaleY}" />
-                </Canvas.LayoutTransform>
-            </Canvas>
+                <Canvas x:Name="LVCanvas" Background="LightGray" Height="704" Width="1056" >
+                    <Canvas.LayoutTransform>
+                        <ScaleTransform ScaleX="{Binding LiveViewScaleX}" ScaleY="{Binding LiveViewScaleY}" />
+                    </Canvas.LayoutTransform>
+                </Canvas>
             </Viewbox>
         </Grid>
         <Grid x:Name="TakePhotoButtonMain" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.4" >
